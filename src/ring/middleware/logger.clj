@@ -48,15 +48,15 @@
 ;;
 ;; TODO: Make a custom layout class that colorizes the log level. Maybe this can be done in a filter.
 ;;
-(def rotating-logger
-  "This logging adapter rotates the logfile nightly at about midnight."
+(def rotating-logger ;; Moved docstring to comment for pre-Clojure 1.3 compatibility
+                     ;; "This logging adapter rotates the logfile nightly at about midnight."
   (DailyRollingFileAppender.
    (EnhancedPatternLayout. production-log-prefix-format)
    base-log-name
    ".yyyy-MM-dd"))
 
-(def appending-logger
-  "This logging adapter simply appends new log lines to the existing logfile."
+(def appending-logger ;; Moved docstring to comment for pre-Clojure 1.3 compatibility
+                      ;;   "This logging adapter simply appends new log lines to the existing logfile."
   (FileAppender.
    (EnhancedPatternLayout. production-log-prefix-format)
    base-log-name
@@ -98,8 +98,8 @@ logger for the application."
 ;; TODO: Alter this subsystem to contain a predefined map of all
 ;; acceptable fg/bg combinations, since some (e.g. white on yellow)
 ;; are practically illegible.
-(def id-colorizations
-  "Foreground / background color codes allowable for random ID colorization."
+(def id-colorizations  ;; Moved docstring to comment for pre-Clojure 1.3 compatibility
+                       ;;   "Foreground / background color codes allowable for random ID colorization."
   {:white :bg-white :black :bg-black :red :bg-red :green :bg-green :blue :bg-blue :yellow :bg-yellow :magenta :bg-magenta :cyan :bg-cyan} )
 
 (def id-foreground-colors (keys id-colorizations))
