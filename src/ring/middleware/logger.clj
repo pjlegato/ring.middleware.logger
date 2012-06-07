@@ -18,7 +18,7 @@
   (import (org.apache.log4j DailyRollingFileAppender EnhancedPatternLayout FileAppender)))
 
 ;; TODO: Facilities for easily modifying the default log file name and log level
-(def base-log-name "logs/ring.log")
+(def base-log-name "log/ring.log")
 (def default-log-level :info)
 
 ;; The generation of the calling class, line numbers, etc. is
