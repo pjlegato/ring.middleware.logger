@@ -155,7 +155,7 @@ infrastructure, unless status is >= 500, in which case they are sent as errors."
 
           (when-not ignore?
             (pre-logger options
-              request))
+                        request))
 
           (let [response (handler request)
                 finish (System/currentTimeMillis)
@@ -163,9 +163,9 @@ infrastructure, unless status is >= 500, in which case they are sent as errors."
 
             (when-not ignore?
               (post-logger options
-                request
-                response
-                total))
+                           request
+                           response
+                           total))
 
             response)
 
@@ -173,9 +173,9 @@ infrastructure, unless status is >= 500, in which case they are sent as errors."
             (let [finish (System/currentTimeMillis)
                   total (- finish start)]
               (exception-logger options
-                request
-                t
-                total))
+                                request
+                                t
+                                total))
             (throw t)))))))
 
 (def default-options
@@ -223,3 +223,4 @@ infrastructure, unless status is >= 500, in which case they are sent as errors."
     (let [body ^String (slurp (:body request))]
       ((:info logger-fns)  " -- Raw request body: '" body "'")
       (handler (assoc request :body (java.io.ByteArrayInputStream. (.getBytes body)))))))
+    
