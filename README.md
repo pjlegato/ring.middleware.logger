@@ -64,7 +64,7 @@ call `wrap-with-logger` like this:
 ```clojure
       (wrap-with-logger my-ring-app
         :info (fn [x] (my.custom.logging/info x))
-        :debug (fn [x] (my.custom.logging/debug x)))
+        :debug (fn [x] (my.custom.logging/™debug x)))
 ```
 
 
@@ -85,7 +85,18 @@ request can be cross-referenced. These IDs are printed in random ANSI colors
 by default, for easy visual correlation of log messages while reading
 a log file.
 
+Ignore URI's
+------------
 
+You can specify an optional list of uri that the logger should ignore. This can ideally
+be used to ignore service healthz checks, favicon.io requests etc. Here is a sample
+ignore-uris config:
+
+```clojure
+   (wrap-with-logger my-ring-app
+     ; leading "/" are optional
+     :ignore-uris ["/healthz" "favicon" "statz"])
+```
 
 License
 -------
