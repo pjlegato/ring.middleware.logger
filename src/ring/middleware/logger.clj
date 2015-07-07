@@ -110,7 +110,7 @@ infrastructure, unless status is >= 500, in which case they are sent as errors."
   (error (log/throwable throwable)))
 
 
-(defn- make-logger-middleware
+(defn make-logger-middleware
   [handler & {:keys [pre-logger post-logger exception-logger] :as options}]
   "Adds logging for requests using the given logger functions.
 
