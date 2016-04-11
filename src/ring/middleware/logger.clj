@@ -32,16 +32,16 @@
     [foreground background]))
 
 
-(defn- format-id [id]
+(defn- format-id [style id]
   "Returns a standard colorized, printable representation of a request id."
   (if id
-    (apply ansi/style (format "%04x" id) [:bright] (get-colorization id))))
+    (apply style (format "%04x" id) [:bright] (get-colorization id))))
 
 
 (defn- pre-logger
-  [{:keys [info debug] :as options}
+  [{:keys [style info debug] :as options}
    {:keys [request-method uri remote-addr query-string params] :as req}]
-  (info (str (ansi/style "Starting " :cyan)
+  (info (str (style "Starting " :cyan)
              request-method " " 
              uri (if query-string (str "?" query-string)) 
              " for " remote-addr
@@ -60,14 +60,14 @@
 Sends all log messages at \"info\" level to the logging
 infrastructure, unless status is >= 500, in which case they are sent as errors."
 
-  [{:keys [error info] :as options}
+  [{:keys [style error info] :as options}
    {:keys [request-method uri remote-addr query-string] :as req}
    {:keys [status] :as resp}  
    totaltime]
 
   (log/trace "[ring] Sending response: " resp)
 
-  (let [colortime (try (apply ansi/style
+  (let [colortime (try (apply style
                               (str totaltime)
                               (cond
                                (>= totaltime 1500)  [:bright :red]
@@ -76,7 +76,7 @@ infrastructure, unless status is >= 500, in which case they are sent as errors."
                                :else :default))
                        (catch Exception e (or totaltime "??")))
         
-        colorstatus (try (apply ansi/style
+        colorstatus (try (apply style
                                 (str status)
                                 (cond
                                  (< status 300)  [:default] 
@@ -84,7 +84,7 @@ infrastructure, unless status is >= 500, in which case they are sent as errors."
                                  (>= status 400) [:red] 
                                  :else           [:yellow]))
                          (catch Exception e (or status "???")))
-        log-message (str (ansi/style "Finished " :cyan)
+        log-message (str (style "Finished " :cyan)
                          request-method " " 
                          uri  (if query-string (str "?" query-string))
                          " for " remote-addr
@@ -103,15 +103,15 @@ infrastructure, unless status is >= 500, in which case they are sent as errors."
 
 
 (defn- exception-logger
-  [{:keys [error] :as options}
+  [{:keys [style error] :as options}
    {:keys [request-method uri remote-addr] :as request}
    throwable totaltime]
-  (error (str (ansi/style "Uncaught exception processing request:" :bright :red)  " for " remote-addr " in (" totaltime " ms) - request was: " request))
+  (error (str (style "Uncaught exception processing request:" :bright :red)  " for " remote-addr " in (" totaltime " ms) - request was: " request))
   (error (log/throwable throwable)))
 
 
 (defn- make-logger-middleware
-  [handler & {:keys [pre-logger post-logger exception-logger] :as options}]
+  [handler & {:keys [style pre-logger post-logger exception-logger] :as options}]
   "Adds logging for requests using the given logger functions.
 
 The convenience function (wrap-with-logger) calls this function with
@@ -140,7 +140,7 @@ middleware has a chance to do something with it.
 ;; https://gist.github.com/kognate/noir.incubator/blob/master/src/noir.incubator/middleware.clj
   (fn [request]
     (let [start (System/currentTimeMillis)]
-      (log-config/with-logging-context (format-id (rand-int 0xffff))
+      (log-config/with-logging-context (format-id style (rand-int 0xffff))
         (try
           (pre-logger options
                       request)
@@ -168,7 +168,8 @@ middleware has a chance to do something with it.
 
 (def default-options
   "Default logging functions."
-  {:info  (fn [x] (log/info x))
+  {:style ansi/style
+   :info  (fn [x] (log/info x))
    :debug (fn [x] (log/debug x))
    :error (fn [x] (log/error x))
    :warn  (fn [x] (log/warn x))
