@@ -16,7 +16,7 @@ Usage
 In your `project.clj`, add the following dependency:
 
 ```clojure
-    [ring.middleware.logger "0.5.1"]
+    [ring.middleware.logger "0.5.2"]
 ```
 
 
