@@ -1,7 +1,7 @@
-(defproject ring.middleware.logger "0.5.1-SNAPSHOT"
+(defproject ring.middleware.logger "0.5.2"
   :description "Ring middleware to log each request."
   :dependencies [[org.clojure/clojure "1.3.0"]
                  [org.clojars.pjlegato/clansi "1.3.0"]
                  [org.tobereplaced/mapply "1.0.0"]
-                 [onelog "0.4.5"]
+                 [onelog "0.5.1"]
                  ])
